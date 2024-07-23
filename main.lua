@@ -20,6 +20,9 @@ local handlers = {
 local memory = {}
 local functions = {}
 
+---comment
+---@param expr string
+---@return string
 local function replace_variables(expr)
     for var, data in pairs(memory) do
         expr = expr:gsub("%f[%w]" .. var .. "%f[%W]", tostring(data.value))
@@ -27,6 +30,8 @@ local function replace_variables(expr)
     return expr
 end
 
+---@param expr string
+---@return any|nil
 local function evaluate_expression(expr)
     expr = replace_variables(expr)
     local func, err = load("return " .. expr)
@@ -44,6 +49,9 @@ local function evaluate_expression(expr)
     return result
 end
 
+---@param name string
+---@param args string
+---@return any|nil
 local function call_function(name, args)
     local func = functions[name]
     if not func then
@@ -84,17 +92,14 @@ end
 
 local function interpreter()
     for line in code:gmatch("[^\r\n]+") do
-        local matched = false
-
         for keyword, token_type in pairs(syntax) do
             if line:match("^" .. keyword) then
-                matched = true
                 local pattern = handlers[token_type]
 
                 if token_type == 'variable' then
                     local variable_type, variable_name, variable_value = line:match(pattern)
 
-                    if not variable_type or not variable_name or not variable_value then
+                    if not (variable_type and variable_name and variable_value) then
                         print("String does not match the pattern")
                         goto continue
                     end
