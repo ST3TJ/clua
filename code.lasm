@@ -1,0 +1,9 @@
+mov cx 0  ; Reset value of CX reg
+
+call 0 cx ; Calling print function
+add cx 1  ; Adding 1 to CX
+cmp cx 11 ; Comparing CX with 11
+jnz 1     ; Jumping on 1 line if CX != 11
+
+cmp cx cx ; Reset zero flag
+mov cx 0  ; Reset value of CX reg
